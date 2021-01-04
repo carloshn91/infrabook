@@ -1,0 +1,32 @@
+#!/bin/sh
+
+NAME="infraestrutura"
+TAG=$(date +"%Y%m%d%H%M%S")
+IMAGE="docker.io/carloshn91/${NAME}:${TAG}"
+LATEST="docker.io/carloshn91/${NAME}:latest"
+
+# Troca para o cluster minikube
+kubectl config use-context minikube
+
+# Criação do namespace infraestrutura
+kubectl create namespace infraestrutura
+
+# Construção da imagem atualizada
+docker build -t ${IMAGE} .
+
+# Imagem "Tagueada" para envio da imagem
+docker tag ${IMAGE} ${LATEST}
+
+# Push da versão criada pelo build
+docker push ${LATEST}
+echo "Created and pushed ${LATEST}"
+
+# Criação do Deployment
+kubectl create -f deployment.yaml
+echo -e "deployment ${NAME}"
+
+# Criação do Service
+kubectl create -f service.yaml
+echo -e "service ${NAME}"
+# Pular Linha
+echo ""
