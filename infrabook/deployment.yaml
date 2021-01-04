@@ -5,7 +5,7 @@ metadata:
     app: infraestrutura-k8s
   name: infraestrutura-k8s
 spec:
-  replicas: 8
+  replicas: 2
   revisionHistoryLimit: 3
   selector:
     matchLabels:
